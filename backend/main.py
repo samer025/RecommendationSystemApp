@@ -24,7 +24,7 @@ app = FastAPI(title="Recommendation API")
 # CORS pour Next.js
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Next.js frontend
+    allow_origins=["*"],  # Next.js frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -123,7 +123,7 @@ if lightfm_mappings:
 else:
     user_mapping = item_mapping = user_inv_map = item_inv_map = {}
 
-feedback_link = "http://localhost:3000/feedback"
+feedback_link = "http://74.161.33.87/feedback"
 
 
 def recommend_lightfm(user_id, top_n=3):
@@ -204,7 +204,7 @@ def recommend(model_name: str, user_id: str, top_n: int = 3):
 
             best_offer_cleaned = best_offer.replace("/", "_")
             slug = quote(f"{user_id}--{best_offer_cleaned}")
-            feedback_slug_link = f"http://localhost:3000/feedback/{slug}"
+            feedback_slug_link = f"http://74.161.33.87/feedback/{slug}"
             body = f"Bonjour,\n\nNotre système vous recommande l'offre suivante :\n\n👉 {best_offer}\n \n.{feedback_slug_link} Merci d'utiliser notre service."
             send_email(client.email, subject, body)
 
