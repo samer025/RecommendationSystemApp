@@ -23,7 +23,12 @@
 # misc
 .DS_Store
 *.pem
-
+node_modules
+npm-debug.log
+.next
+.git
+.gitignore
+README.md
 # debug
 npm-debug.log*
 yarn-debug.log*

@@ -12,7 +12,8 @@ type Stats = {
 }; 
 
 export default async function FeedbackDashboardPage() { 
-  const res = await fetch("http://localhost:8000/feedback/stats", { 
+  // Use the Docker service name instead of localhost
+  const res = await fetch("http://backend:8000/feedback/stats", { 
     cache: "no-store" 
   }); 
   
