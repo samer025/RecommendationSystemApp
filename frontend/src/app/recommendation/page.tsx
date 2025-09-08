@@ -130,7 +130,7 @@ export default function RecommendationPage() {
 
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/recommend/${model}/${userId}?top_n=3`,
+        `api/recommend/${model}/${userId}?top_n=3`,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Si ton backend attend token ici
