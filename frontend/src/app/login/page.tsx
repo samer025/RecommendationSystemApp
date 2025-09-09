@@ -110,7 +110,7 @@ export default function LoginPage() {
           type="submit"
           className="w-full py-3 mt-4 text-white bg-blue-900 rounded-lg hover:bg-blue-800 transition-colors"
         >
-          Logins
+          Login houssam
         </button>
 
         {/* Register Link */}
