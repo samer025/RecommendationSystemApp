@@ -1,0 +1,55 @@
+name: Deploy to Azure VM
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install SSHpass
+      run: sudo apt-get update && sudo apt-get install -y sshpass
+
+    - name: Deploy to Azure VM
+      run: |
+        # Transfer the entire project to the server
+        echo "📤 Uploading code to Azure VM..."
+        sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./* azureuser@74.161.33.87:/home/azureuser/RecommendationSystemApp/
+        
+        # Execute deployment commands
+        echo "🚀 Starting deployment..."
+        sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no azureuser@74.161.33.87 "
+          set -e
+          cd /home/azureuser/RecommendationSystemApp
+          
+          echo '🛑 Stopping existing containers...'
+          docker-compose down || true
+          
+          echo '🐳 Building new containers...'
+          docker-compose build --pull
+          
+          echo '🚀 Starting containers...'
+          docker-compose up -d
+          
+          echo '🧹 Cleaning up unused images...'
+          docker image prune -f
+          
+          echo '✅ Deployment completed successfully!'
+        "
+
+    - name: Verify deployment
+      run: |
+        echo "🔍 Checking deployment status..."
+        sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no azureuser@74.161.33.87 "
+          cd /home/azureuser/RecommendationSystemApp
+          echo '📊 Container status:'
+          docker-compose ps
+          echo ''
+          echo '🔍 Recent logs:'
+          docker-compose logs --tail=20
+        "
