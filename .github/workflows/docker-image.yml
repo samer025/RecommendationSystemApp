@@ -1,0 +1,23 @@
+name: Simple Deploy
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via Git Pull
+        run: |
+          sshpass -p "YourSecurePassword123!" ssh -o StrictHostKeyChecking=no azureuser@74.161.33.87 "
+            set -e
+            cd /home/azureuser/RecommendationSystemApp
+            echo '📥 Pulling latest code...'
+            git pull origin main
+            echo '🐳 Restarting containers with build...'
+            docker-compose down
+            docker-compose up --build -d
+            echo '✅ Deployment completed!'
+            docker-compose ps
+          "
