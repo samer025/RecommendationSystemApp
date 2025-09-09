@@ -19,11 +19,11 @@ jobs:
       run: |
         # Transfer the entire project to the server
         echo "📤 Uploading code to Azure VM..."
-        sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./* azureuser@74.161.33.87:/home/azureuser/RecommendationSystemApp/
+        sshpass -p "YourSecurePassword123!" scp -o StrictHostKeyChecking=no -r ./* azureuser@74.161.33.87:/home/azureuser/RecommendationSystemApp/
         
         # Execute deployment commands
         echo "🚀 Starting deployment..."
-        sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no azureuser@74.161.33.87 "
+        sshpass -p "YourSecurePassword123!" ssh -o StrictHostKeyChecking=no azureuser@74.161.33.87 "
           set -e
           cd /home/azureuser/RecommendationSystemApp
           
