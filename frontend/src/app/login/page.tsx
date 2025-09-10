@@ -44,7 +44,7 @@ export default function LoginPage() {
       setTimeout(() => {
         setShowPopup(false);
         router.push("/feedback-dashboard");
-      }, 2000);
+      }, 400);
     } else {
       alert("Login failed");
     }
