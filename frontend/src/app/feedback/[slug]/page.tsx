@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { api_url } from '@/api';
 
 export default function FeedbackForm() {
   const params = useParams();
@@ -30,7 +31,7 @@ export default function FeedbackForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/feedback', {
+      const res = await fetch(`${api_url}/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

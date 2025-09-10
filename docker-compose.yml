@@ -5,7 +5,9 @@ services:
     build: ./frontend
     ports: ["3000:3000"]
     environment:
-      - NEXT_PUBLIC_API_URL=http://backend:8000
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_API_URL_PROD=/api
+      - DEV_ENV=true
     volumes:
       - ./frontend:/app
       - /app/node_modules

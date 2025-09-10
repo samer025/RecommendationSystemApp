@@ -1,8 +1,11 @@
-import React from "react"; 
+"use client"
+
+import React, { useEffect, useState } from "react"; 
 import AverageRatingChart from "../components/dashboard/AverageRatingChart"; 
 import RatingDistributionChart from "../components/dashboard/RatingDistributionChart"; 
 import StatCard from "../components/dashboard/StatCard"; 
 import AdminLayout from "../../layout/AdminLayout";
+import { api_url } from "@/api";
 
 type Stats = { 
   totalFeedbacks: number; 
@@ -11,15 +14,63 @@ type Stats = {
   averagePerOffer: { offer: string; avg: number; count: number }[]; 
 }; 
 
-export default async function FeedbackDashboardPage() { 
-  // Use the Docker service name instead of localhost
-  const res = await fetch("http://backend:8000/feedback/stats", { 
-    cache: "no-store" 
-  }); 
-  
-  if (!res.ok) throw new Error("Impossible de récupérer les stats"); 
-  
-  const stats: Stats = await res.json(); 
+export default function FeedbackDashboardPage() { 
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        // Use the Docker service name instead of localhost
+        const res = await fetch(`${api_url}/feedback/stats`, { 
+        }); 
+        
+        if (!res.ok) throw new Error("Impossible de récupérer les stats"); 
+        
+        const data: Stats = await res.json(); 
+        setStats(data);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Une erreur est survenue");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="flex justify-center items-center h-64">
+          <div className="text-gray-500 dark:text-gray-400">Chargement...</div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <AdminLayout>
+        <div className="flex justify-center items-center h-64">
+          <div className="text-red-500 dark:text-red-400">Erreur: {error}</div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <AdminLayout>
+        <div className="flex justify-center items-center h-64">
+          <div className="text-gray-500 dark:text-gray-400">Aucune donnée disponible</div>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return ( 
     <AdminLayout>

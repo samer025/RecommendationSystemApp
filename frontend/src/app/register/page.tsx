@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Input from "@/components/form/input/InputField";
+import { api_url } from "@/api";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/auth/register", {
+    const response = await fetch(`${api_url}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -25,7 +26,7 @@ export default function RegisterPage() {
       setTimeout(() => {
         setShowPopup(false);
         router.push("/login");
-      }, 2000);
+      }, 400);
     } else {
       alert("Registration failed");
     }

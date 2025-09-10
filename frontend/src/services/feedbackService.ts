@@ -1,5 +1,7 @@
+import { api_url } from "@/api";
+
 // src/services/feedbackService.ts
-const API_BASE_URL ='/api';
+const API_BASE_URL = api_url;
 
 export interface Feedback {
   id: number;
