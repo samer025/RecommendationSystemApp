@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import { api_url } from "@/api";
 
 const styles = {
   background: {
@@ -130,7 +131,7 @@ export default function RecommendationPage() {
 
     try {
       const res = await fetch(
-        `api/recommend/${model}/${userId}?top_n=3`,
+        `${api_url}/recommend/${model}/${userId}?top_n=3`,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Si ton backend attend token ici
