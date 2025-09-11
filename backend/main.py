@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
@@ -29,6 +30,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Environment configuration
+ENV = os.getenv("ENV", "development")
+BASE_URL = os.getenv("BASE_URL", "http://74.161.33.87")
+
+# Set feedback link based on environment
+if ENV == "production":
+    feedback_link = f"{BASE_URL}/feedback"
+else:  # development
+    feedback_link = "http://localhost:3000/feedback"
+
+print(f"🚀 Environment: {ENV}")
+print(f"🌐 Feedback link: {feedback_link}")
 
 
 # Database initialization with retry logic
@@ -123,8 +137,6 @@ if lightfm_mappings:
 else:
     user_mapping = item_mapping = user_inv_map = item_inv_map = {}
 
-feedback_link = "http://74.161.33.87/feedback"
-
 
 def recommend_lightfm(user_id, top_n=3):
     if user_id not in user_mapping:
@@ -204,7 +216,7 @@ def recommend(model_name: str, user_id: str, top_n: int = 3):
 
             best_offer_cleaned = best_offer.replace("/", "_")
             slug = quote(f"{user_id}--{best_offer_cleaned}")
-            feedback_slug_link = f"http://74.161.33.87/feedback/{slug}"
+            feedback_slug_link = f"{feedback_link}/{slug}"
             body = f"Bonjour,\n\nNotre système vous recommande l'offre suivante :\n\n👉 {best_offer}\n \n.{feedback_slug_link} Merci d'utiliser notre service."
             send_email(client.email, subject, body)
 
